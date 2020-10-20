@@ -191,13 +191,8 @@ impl WindowContents {
             };
             #[cfg(feature = "web-sys")]
             let ctx = {
-                use js_sys::{Map, Object};
-                use wasm_bindgen::{JsCast, JsValue};
+                use wasm_bindgen::JsCast;
                 use winit::platform::web::WindowExtWebSys;
-                let map = Map::new();
-                map.set(&JsValue::from_str("premultipliedAlpha"), &JsValue::FALSE);
-                map.set(&JsValue::from_str("alpha"), &JsValue::FALSE);
-                let props = Object::from_entries(&map).expect("TODO");
 
                 window
                     .window
