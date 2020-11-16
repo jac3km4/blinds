@@ -7,6 +7,10 @@ use std::future::Future;
 use std::sync::Arc;
 use winit::event::Event as WinitEvent;
 use winit::event_loop::{ControlFlow, EventLoop};
+#[cfg(target_os = "unix")]
+use winit::platform::unix::EventLoopExtUnix;
+#[cfg(target_os = "windows")]
+use winit::platform::windows::EventLoopExtWindows;
 
 /// The entry point for a blinds-based application
 ///
@@ -29,7 +33,7 @@ where
     let stream = EventStream::new();
     let buffer = stream.buffer();
 
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new_any_thread();
     let window = Arc::new(WindowContents::new(&event_loop, settings));
     let pool = LocalPool::new();
     pool.spawner()
@@ -57,7 +61,7 @@ where
     let stream = EventStream::new();
     let buffer = stream.buffer();
 
-    let event_loop = EventLoop::new();
+    let event_loop = EventLoop::new_any_thread();
     let (window, ctx) = WindowContents::new_gl(&event_loop, settings);
     let window = Arc::new(window);
     let pool = LocalPool::new();
